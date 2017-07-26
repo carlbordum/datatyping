@@ -1,21 +1,17 @@
-def _check_elem(elem, type_, strict):
-    if isinstance(elem, list) and len(type_) == 1:
-        for item in elem:
-            _check_elem(item, type_[0], strict=strict)
-    elif isinstance(type_, list) and isinstance(elem, list):
-        for item, type__ in zip(elem, type_):
-            _check_elem(item, type__, strict=strict)
-    elif isinstance(type_, dict):
-        validate_data(type_, elem, strict=strict)
-    elif not isinstance(elem, type_):
-        error_msg = '{} is of type {}, expected type {}'
-        raise TypeError(error_msg.format(elem, type(elem), type_))
-
-
 def validate_data(structure, data, strict=True):
-    for key, type_ in structure.items():
-        value = data[key]
-        _check_elem(value, type_, strict=strict)
-    if strict and len(structure) != len(data):
-        raise KeyError(set(structure.keys()) ^ set(data.keys()))
+    if isinstance(data, list) and len(structure) == 1:
+        for item in data:
+            validate_data(structure[0], item, strict=strict)
+    elif isinstance(structure, list) and isinstance(data, list):
+        for item, type_ in zip(data, structure):
+            validate_data(type_, item, strict=strict)
+    elif isinstance(structure, dict):
+        for key, type_ in structure.items():
+            item = data[key]
+            validate_data(type_, item, strict=strict)
+        if strict and len(structure) != len(data):
+            raise KeyError(set(structure.keys()) ^ set(data.keys()))
+    elif not isinstance(data, structure):
+        error_msg = '{} is of type {}, expected type {}'
+        raise TypeError(error_msg.format(data, type(data), structure))
     return True
