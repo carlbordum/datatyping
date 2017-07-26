@@ -41,6 +41,6 @@ def validate(structure, data, *, strict=True):
             validate(type_, item, strict=strict)
         if strict and len(structure) != len(data):
             raise KeyError(set(structure.keys()) ^ set(data.keys()))
-    elif not isinstance(data, structure):
+    elif not isinstance(data, structure):  # structure is a type here
         error_msg = '{} is of type {}, expected type {}'
         raise TypeError(error_msg.format(data, type(data).__name__, structure.__name__))
