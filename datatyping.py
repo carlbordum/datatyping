@@ -1,4 +1,4 @@
-def validate_data(structure, data, *, strict=True):
+def validate(structure, data, *, strict=True):
     if isinstance(data, list) and len(structure) == 1:
         for item in data:
             validate_data(structure[0], item, strict=strict)
