@@ -2,6 +2,10 @@ import pytest
 from datatyping import validate_data
 
 
+def test_empty():
+    assert validate_data({}, {})
+
+
 def test_plain():
     assert validate_data({'a': int, 'b': str}, {'a': 1, 'b': 'c'})
 
@@ -11,14 +15,23 @@ def test_plain_typeerror():
         validate_data({'a': int}, {'a': 3.4})
 
 
-def test_plain_strict():
+def test_plain_keyerror():
     with pytest.raises(KeyError):
         validate_data({'a': str, 'b': float}, {'a': 'abc'})
 
 
+def test_plain_no_strict():
+    assert validate_data({'a': str}, {'a': 'abc', 'b': 123}, strict=False)
+
+
 def test_plain_no_strict_error():
     with pytest.raises(KeyError):
-        validate_data({'a': str, 'b': float}, {'a': 'abc'}, False)
+        validate_data({'a': str, 'b': float}, {'a': 'abc'}, strict=False)
+
+
+def test_strict():
+    with pytest.raises(KeyError):
+        validate_data({'a': str}, {'a': 'abc', 'oh no too much data': 123})
 
 
 def test_list():
