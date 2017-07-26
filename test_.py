@@ -31,11 +31,18 @@ def test_list_typeerror():
 
 
 def test_nested_list():
-    assert validate_data({'a': [[int], [str]]}, {'a': [[1,2,3,4], ['a', 'b', 'c', 'd']]})
+    assert validate_data({'a': [[int], [str]]},
+            {'a': [[1,2,3,4], ['a', 'b', 'c', 'd']]})
 
 
 def test_nested_dict():
-    assert validate_data({'a': {'b': [[int], [str]]}}, {'a': {'b': [[1,2,3,4], ['a','b','c']]}})
+    assert validate_data({'a': {'b': [[int], [str]]}},
+            {'a': {'b': [[1,2,3,4], ['a','b','c']]}})
+
+
+def test_mad_nesting():
+    assert validate_data({'list': [int, str, [[int], [int]]]},
+            {'list': [1, 'a', [[1,2,3], [4,5,6]]]})
 
 
 def test_advanced():
