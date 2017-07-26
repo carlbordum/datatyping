@@ -1,5 +1,4 @@
 def _check_elem(elem, type_, strict):
-    print(elem, type_)
     if isinstance(elem, list) and len(type_) == 1:
         for item in elem:
             _check_elem(item, type_[0], strict=strict)
