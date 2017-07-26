@@ -1,60 +1,60 @@
 import pytest
-from datatyping import validate_data
+from datatyping import validate
 
 
 def test_empty():
-    assert validate_data({}, {})
+    assert validate({}, {})
 
 
 def test_plain():
-    assert validate_data({'a': int, 'b': str}, {'a': 1, 'b': 'c'})
+    assert validate({'a': int, 'b': str}, {'a': 1, 'b': 'c'})
 
 
 def test_plain_typeerror():
     with pytest.raises(TypeError):
-        validate_data({'a': int}, {'a': 3.4})
+        validate({'a': int}, {'a': 3.4})
 
 
 def test_plain_keyerror():
     with pytest.raises(KeyError):
-        validate_data({'a': str, 'b': float}, {'a': 'abc'})
+        validate({'a': str, 'b': float}, {'a': 'abc'})
 
 
 def test_plain_no_strict():
-    assert validate_data({'a': str}, {'a': 'abc', 'b': 123}, strict=False)
+    assert validate({'a': str}, {'a': 'abc', 'b': 123}, strict=False)
 
 
 def test_plain_no_strict_error():
     with pytest.raises(KeyError):
-        validate_data({'a': str, 'b': float}, {'a': 'abc'}, strict=False)
+        validate({'a': str, 'b': float}, {'a': 'abc'}, strict=False)
 
 
 def test_strict():
     with pytest.raises(KeyError):
-        validate_data({'a': str}, {'a': 'abc', 'oh no too much data': 123})
+        validate({'a': str}, {'a': 'abc', 'oh no too much data': 123})
 
 
 def test_list():
-    assert validate_data({'a': [int]}, {'a': [1, 2, 3]})
+    assert validate({'a': [int]}, {'a': [1, 2, 3]})
 
 
 def test_list_typeerror():
     with pytest.raises(TypeError):
-        validate_data({'a': [int]}, {'a': [1, 2, 3.6]})
+        validate({'a': [int]}, {'a': [1, 2, 3.6]})
 
 
 def test_nested_list():
-    assert validate_data({'a': [[int], [str]]},
+    assert validate({'a': [[int], [str]]},
             {'a': [[1,2,3,4], ['a', 'b', 'c', 'd']]})
 
 
 def test_nested_dict():
-    assert validate_data({'a': {'b': [[int], [str]]}},
+    assert validate({'a': {'b': [[int], [str]]}},
             {'a': {'b': [[1,2,3,4], ['a','b','c']]}})
 
 
 def test_mad_nesting():
-    assert validate_data({'list': [int, str, [[int], [int]]]},
+    assert validate({'list': [int, str, [[int], [int]]]},
             {'list': [1, 'a', [[1,2,3], [4,5,6]]]})
 
 
@@ -81,4 +81,4 @@ def test_advanced():
         ],
         'timestamps': [12351346, 12345134, 7684545, 1267457, 0],
     }
-    assert validate_data(structure, data)
+    assert validate(structure, data)
