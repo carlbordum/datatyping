@@ -3,11 +3,11 @@ from datatyping import validate
 
 
 def test_empty():
-    assert validate([], [])
+    assert validate([], []) is None
 
 
 def test_plain():
-    assert validate([int], [1, 2, 3, 4, 5])
+    assert validate([int], [1, 2, 3, 4, 5]) is None
 
 
 def test_plain_typeerror():
@@ -16,11 +16,11 @@ def test_plain_typeerror():
 
 
 def test_dict_empty():
-    assert validate([dict], [{}, {}, {}])
+    assert validate([dict], [{}, {}, {}]) is None
 
 
 def test_dict_strict():
-    assert validate([{'a': int}], [{'a': 123,}, {'a': 456}])
+    assert validate([{'a': int}], [{'a': 123,}, {'a': 456}]) is None
 
 
 def test_dict_nested():
@@ -28,4 +28,4 @@ def test_dict_nested():
         [
             {'a': {'b': [{}, {}]}},
             {'a': {'b': [{'any': 'key'}, {'used': 'here'}]}},
-        ])
+        ]) is None

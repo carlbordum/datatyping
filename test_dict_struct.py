@@ -3,11 +3,11 @@ from datatyping import validate
 
 
 def test_empty():
-    assert validate({}, {})
+    assert validate({}, {}) is None
 
 
 def test_plain():
-    assert validate({'a': int, 'b': str}, {'a': 1, 'b': 'c'})
+    assert validate({'a': int, 'b': str}, {'a': 1, 'b': 'c'}) is None
 
 
 def test_plain_typeerror():
@@ -21,7 +21,7 @@ def test_plain_keyerror():
 
 
 def test_plain_no_strict():
-    assert validate({'a': str}, {'a': 'abc', 'b': 123}, strict=False)
+    assert validate({'a': str}, {'a': 'abc', 'b': 123}, strict=False) is None
 
 
 def test_plain_no_strict_error():
@@ -35,7 +35,7 @@ def test_strict():
 
 
 def test_list():
-    assert validate({'a': [int]}, {'a': [1, 2, 3]})
+    assert validate({'a': [int]}, {'a': [1, 2, 3]}) is None
 
 
 def test_list_typeerror():
@@ -45,17 +45,17 @@ def test_list_typeerror():
 
 def test_nested_list():
     assert validate({'a': [[int], [str]]},
-        {'a': [[1,2,3,4], ['a', 'b', 'c', 'd']]})
+        {'a': [[1,2,3,4], ['a', 'b', 'c', 'd']]}) is None
 
 
 def test_nested_dict():
     assert validate({'a': {'b': [[int], [str]]}},
-        {'a': {'b': [[1,2,3,4], ['a','b','c']]}})
+        {'a': {'b': [[1,2,3,4], ['a','b','c']]}}) is None
 
 
 def test_mad_nesting():
     assert validate({'list': [int, str, [[int], [int]]]},
-        {'list': [1, 'a', [[1,2,3], [4,5,6]]]})
+        {'list': [1, 'a', [[1,2,3], [4,5,6]]]}) is None
 
 
 def test_advanced():
@@ -81,4 +81,4 @@ def test_advanced():
         ],
         'timestamps': [12351346, 12345134, 7684545, 1267457, 0],
     }
-    assert validate(structure, data)
+    assert validate(structure, data) is None

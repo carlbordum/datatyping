@@ -14,4 +14,3 @@ def validate(structure, data, *, strict=True):
     elif not isinstance(data, structure):
         error_msg = '{} is of type {}, expected type {}'
         raise TypeError(error_msg.format(data, type(data), structure))
-    return True
