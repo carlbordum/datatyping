@@ -7,7 +7,7 @@ setup(
     url='https://github.com/Zaab1t/datatyping',
     author='Carl Bordum Hansen',
     author_email='carl@bordum.dk',
-    version='0.0.1',
+    version='0.0.2',
     copyright='Copyright (c) 2017 Carl Bordum Hansen',
     license='MIT',
     py_modules=['datatyping'],
