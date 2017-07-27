@@ -28,13 +28,14 @@ Inspired by ["How Python Makes Working With Data More Difficult in he Long Run"]
 
 
 ## Justification
-Type checking is not very pythonic.
+But type checking is not pythonic at all! Nope, but let's try to justify this lib:
 - Explicit is better than implicit.
 - Readability counts.
 - Unlike most dynamic languages, you can't do `'a' + 1` in Python, because it could cause unwanted errors another place, later in your code. This prevents the same.
 
 
-## Examples
+## Features
+### Basics
 ``` python
 >>> from datatyping import validate
 >>> # Working with lists
@@ -48,7 +49,18 @@ Type checking is not very pythonic.
 KeyError: {'b'}
 >>> validate({'a': int}, {'a': 2, 'b': 'yay'}, strict=False)
 ```
-
+### Contracts
+``` python
+>>> from datatyping import validate, Contract
+>>> class PositiveInteger(Contract):
+... 	def __init__(self, i):
+... 		if i < 1:
+...			raise TypeError('%d is not positive' % i)
+...
+>>> validate([PositiveInteger], [1, 2, 3, 4])
+>>> validate([PositiveInteger], [1, 2, 3, -4])
+TypeError: -4 is not positive
+```
 
 ## Notes
 - Any and all contributions are welcome.
