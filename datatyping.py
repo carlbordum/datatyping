@@ -8,13 +8,20 @@ class Contract:
     
     Usage:
         >>> class ShortString(Contract):
-        ...     def __init__(self, s):
+                @staticmethod
+        ...     def validate(s):
         ...         if len(s) > 5:
         ...             raise TypeError('%s is too long (%d > 5)' % (s, len(s)))
         ...
         >>> validate([ShortString], ['asdf', 'asdfg', 'asdfgh'])
         TypeError: asdfgh is too long (6 > 5)
+
+    See Also
+    --------
+    https://github.com/Zaab1t/datatyping/blob/master/tests/test_contracts.py
     """
+    def __init__(self, *children):
+        self.children = list(children)
 
 
 def validate(structure, data, *, strict=True):
@@ -43,7 +50,18 @@ def validate(structure, data, *, strict=True):
         If a dict in `data` misses a key or `strict` is True and a dict
         has keys not in `structure`.
     """
-    if isinstance(data, list) and len(structure) == 1:
+    if isinstance(structure, type) and issubclass(structure, Contract):
+        # structure is a class, not an instance
+        structure.validate(data)
+    elif isinstance(structure, Contract):
+        if len(structure.children) == 1:
+            for item in data:
+                validate(structure.children[0], item, strict=strict)
+        else:
+            assert len(structure.children) == len(data)
+            for type_, item in zip(structure.children, data):
+                validate(type_, item, strict=strict)
+    elif isinstance(data, list) and len(structure) == 1:
         for item in data:
             validate(structure[0], item, strict=strict)
     elif isinstance(structure, list) and isinstance(data, list):
@@ -56,8 +74,5 @@ def validate(structure, data, *, strict=True):
         if strict and len(structure) != len(data):
             raise KeyError(set(structure.keys()) ^ set(data.keys()))
     elif not isinstance(data, structure):  # structure is a type here
-        if issubclass(structure, Contract):
-            structure(data)
-        else:
-            error_msg = '{} is of type {}, expected type {}'
-            raise TypeError(error_msg.format(data, type(data).__name__, structure.__name__))
+        error_msg = '{} is of type {}, expected type {}'
+        raise TypeError(error_msg.format(data, type(data).__name__, structure.__name__))
