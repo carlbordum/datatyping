@@ -1,6 +1,20 @@
-__all__ = ['validate']
+__all__ = ['validate', 'Contract']
 __author__ = 'Carl Bordum Hansen'
 __license__ = 'MIT'
+
+
+class Contract:
+    """Ensure that data meets a certain requirement.
+    
+    Usage:
+        >>> class ShortString(Contract):
+        ...     def __init__(self, s):
+        ...         if len(s) > 5:
+        ...             raise TypeError('%s is too long (%d > 5)' % (s, len(s)))
+        ...
+        >>> validate([ShortString], ['asdf', 'asdfg', 'asdfgh'])
+        TypeError: asdfgh is too long (6 > 5)
+    """
 
 
 def validate(structure, data, *, strict=True):
@@ -42,5 +56,8 @@ def validate(structure, data, *, strict=True):
         if strict and len(structure) != len(data):
             raise KeyError(set(structure.keys()) ^ set(data.keys()))
     elif not isinstance(data, structure):  # structure is a type here
-        error_msg = '{} is of type {}, expected type {}'
-        raise TypeError(error_msg.format(data, type(data).__name__, structure.__name__))
+        if issubclass(structure, Contract):
+            structure(data)
+        else:
+            error_msg = '{} is of type {}, expected type {}'
+            raise TypeError(error_msg.format(data, type(data).__name__, structure.__name__))
