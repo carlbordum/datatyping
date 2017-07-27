@@ -53,13 +53,32 @@ KeyError: {'b'}
 ``` python
 >>> from datatyping import validate, Contract
 >>> class PositiveInteger(Contract):
-... 	def __init__(self, i):
+... 	@staticmethod
+... 	def validate(i):
 ... 		if i < 1:
 ...			raise TypeError('%d is not positive' % i)
-...
+
 >>> validate([PositiveInteger], [1, 2, 3, 4])
 >>> validate([PositiveInteger], [1, 2, 3, -4])
 TypeError: -4 is not positive
+>>> # with lists
+>>> class TwoItemList(Contract):
+... 	@staticmethod
+... 	def validate(l):
+... 		if len(l) != 2:
+... 			raise TypeError('list has length of %d, not 2' % len(l))
+
+>>> struct = TwoItemList(
+... 	TwoItemList(
+...		{'id': PositiveInteger, 'age': PositiveInteger}
+...	),
+... 	str,
+...)
+>>> data = [
+... 	[{'id': 5, 'age' 37}, {'id': 6, 'age': 38}],
+...	'some string'
+... ]
+>>> validate(struct, data)
 ```
 
 ## Notes
