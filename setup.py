@@ -10,5 +10,5 @@ setup(
     version='0.0.2',
     copyright='Copyright (c) 2017 Carl Bordum Hansen',
     license='MIT',
-    py_modules=['datatyping'],
+    packages=['datatyping'],
 )
