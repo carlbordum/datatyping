@@ -51,7 +51,7 @@ def _new_safe_repr(object, context, maxlevels, level):
     return typerepr(object), True, False
 
 
-def print_structure(data, stream=None, indent=4, width=80, depth=None,
+def pprint(data, stream=None, indent=4, width=80, depth=None,
           compact=False):
     old_safe_repr = pprint._safe_repr
     pprint._safe_repr = _new_safe_repr
