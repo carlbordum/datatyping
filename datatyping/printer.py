@@ -55,6 +55,8 @@ def _new_safe_repr(object, context, maxlevels, level):
             if irecur:
                 recursion = True
         del context[id(object)]
+        if len(set(items)) == 1:
+            items = [items[0]]
         return format % ', '.join(items), readable, recursive
     return typerepr(object), True, False
 
