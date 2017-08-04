@@ -11,4 +11,9 @@ setup(
     copyright='Copyright (c) 2017 Carl Bordum Hansen',
     license='MIT',
     packages=['datatyping'],
+    entry_points = {
+        'console_scripts': [
+            'datatyping = datatyping.__main__:main',
+        ]
+    },
 )
