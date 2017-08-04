@@ -1,21 +1,14 @@
 import pytest
-from datatyping.printer import write
-from io import StringIO
+from datatyping.printer import pformat
 
 
 def test_simple_ints():
-    f = StringIO()
-    write([1, 2, 3], stream=f)
-    assert f.getvalue() == '[int]'
+    assert pformat([1, 2, 3]) == '[int]'
 
 
 def test_simple_strs():
-    f = StringIO()
-    write(['a', 'b', 'c'], stream=f)
-    assert f.getvalue() == '[str]'
+    assert pformat(['a', 'b', 'c']) == '[str]'
 
 
 def test_simple_mix():
-    f = StringIO()
-    write(['a', 1, 2, 'b'], stream=f)
-    assert f.getvalue() == '[str, int, int, str]'
+    assert pformat(['a', 1, 2, 'b']) == '[str, int, int, str]'
