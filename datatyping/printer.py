@@ -1,18 +1,19 @@
 """Like pprint, but with types."""
 
 
-__all__ = ['write']
+__all__ = ['pprint', 'pformat']
 __author__ = 'Carl Bordum Hansen'
 __license__ = 'MIT'
 
 
-import pprint
+import pprint as _pprint
+import contextlib
 
 
 def _new_safe_repr(object, context, maxlevels, level):
     typerepr = lambda object: type(object).__name__
     type_ = type(object)
-    if type_ in pprint._builtin_scalars:
+    if type_ in _pprint._builtin_scalars:
         return typerepr(object), True, False
 
     r = getattr(type_, '__repr__', None)
@@ -58,14 +59,26 @@ def _new_safe_repr(object, context, maxlevels, level):
     return typerepr(object), True, False
 
 
-def write(data, stream=None, indent=4, width=80, depth=None,
+@contextlib.contextmanager
+def change_pprint_repr():
+    old_safe_repr = _pprint._safe_repr
+    _pprint._safe_repr = _new_safe_repr
+    yield
+    _pprint._safe_repr = old_safe_repr
+
+
+def pprint(object, stream=None, indent=4, width=80, depth=None,
           compact=False):
     """Pretty-prints the data structure, but prints types instead of most
     values. Arguments are passed on to pprint.pprint. This means that
     this function prints to stdout if *stream* is None.
     """
-    old_safe_repr = pprint._safe_repr
-    pprint._safe_repr = _new_safe_repr
-    pprint.pprint(data, stream=stream, indent=indent, width=width,
-        depth=depth, compact=compact)
-    pprint._safe_repr = old_safe_repr
+    with change_pprint_repr():
+        _pprint.pprint(object, stream=stream, indent=indent, width=width,
+            depth=depth, compact=compact)
+
+
+def pformat(object, indent=4, width=80, depth=None, compact=False):
+    with change_pprint_repr():
+        return _pprint.pformat(object, indent=indent,
+            width=width, depth=depth, compact=compact)
