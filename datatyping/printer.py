@@ -1,6 +1,11 @@
 """Like pprint, but with types."""
 
 
+__all__ = ['write']
+__author__ = 'Carl Bordum Hansen'
+__license__ = 'MIT'
+
+
 import pprint
 
 
