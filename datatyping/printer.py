@@ -1,5 +1,4 @@
 import pprint
-from functools import partial
 
 
 def _new_safe_repr(object, context, maxlevels, level):
@@ -21,7 +20,7 @@ def _new_safe_repr(object, context, maxlevels, level):
             vrepr, vreadable, recur = _new_safe_repr(v, context, maxlevels, level)
             pairs.append('%s: %s' % (repr(k), vrepr))
             readable = readable and vreadable
-            if vrecur:
+            if recur:
                 recursive = True
         del context[id(object)]
         return '{%s}' % ', '.join(pairs), readable, recursive
@@ -51,7 +50,7 @@ def _new_safe_repr(object, context, maxlevels, level):
     return typerepr(object), True, False
 
 
-def pprint(data, stream=None, indent=4, width=80, depth=None,
+def write(data, stream=None, indent=4, width=80, depth=None,
           compact=False):
     old_safe_repr = pprint._safe_repr
     pprint._safe_repr = _new_safe_repr
