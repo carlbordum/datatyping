@@ -1,3 +1,6 @@
+"""Like pprint, but with types."""
+
+
 import pprint
 
 
@@ -52,6 +55,10 @@ def _new_safe_repr(object, context, maxlevels, level):
 
 def write(data, stream=None, indent=4, width=80, depth=None,
           compact=False):
+    """Pretty-prints the data structure, but prints types instead of most
+    values. Arguments are passed on to pprint.pprint. This means that
+    this function prints to stdout if *stream* is None.
+    """
     old_safe_repr = pprint._safe_repr
     pprint._safe_repr = _new_safe_repr
     pprint.pprint(data, stream=stream, indent=indent, width=width,
