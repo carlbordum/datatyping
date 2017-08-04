@@ -4,15 +4,15 @@ Safe data validation for greater documentation and maintainability.
 ``` python
 >>> import datatyping
 >>> structure = {
-...	'id': int,
-...	'cars': [{'model': str, 'passengers': int}],
+...     'id': int,
+...     'cars': [{'model': str, 'passengers': int}],
 ... }
 >>> data = {
-... 	'id': 215,
-...	'cars': [
-...		{'model': 'Cadillac', 'passengers': 2},
-...		{'model': 'Volvo', 'passengers': 4},
-...	]
+...     'id': 215,
+...     'cars': [
+...         {'model': 'Cadillac', 'passengers': 2},
+...         {'model': 'Volvo', 'passengers': 4},
+...     ]
 ... }
 >>> datatyping.validate(structure, data)
 ```
@@ -53,30 +53,30 @@ KeyError: {'b'}
 ``` python
 >>> from datatyping import validate, Contract
 >>> class PositiveInteger(Contract):
-... 	@staticmethod
-... 	def validate(i):
-... 		if i < 1:
-...			raise TypeError('%d is not positive' % i)
+...     @staticmethod
+...     def validate(i):
+...         if i < 1:
+...             raise TypeError('%d is not positive' % i)
 
 >>> validate([PositiveInteger], [1, 2, 3, 4])
 >>> validate([PositiveInteger], [1, 2, 3, -4])
 TypeError: -4 is not positive
 >>> # with lists
 >>> class TwoItemList(Contract):
-... 	@staticmethod
-... 	def validate(l):
-... 		if len(l) != 2:
-... 			raise TypeError('list has length of %d, not 2' % len(l))
+...     @staticmethod
+...     def validate(l):
+...         if len(l) != 2:
+...             raise TypeError('list has length of %d, not 2' % len(l))
 
 >>> struct = TwoItemList(
-... 	TwoItemList(
-...		{'id': PositiveInteger, 'age': PositiveInteger}
-...	),
-... 	str,
+...     TwoItemList(
+...	    {'id': PositiveInteger, 'age': PositiveInteger}
+...     ),
+...     str,
 ...)
 >>> data = [
-... 	[{'id': 5, 'age' 37}, {'id': 6, 'age': 38}],
-...	'some string'
+...     [{'id': 5, 'age' 37}, {'id': 6, 'age': 38}],
+...     'some string'
 ... ]
 >>> validate(struct, data)
 ```
