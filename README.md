@@ -72,6 +72,34 @@ TypeError: -4 is not positive
 >>> validate(struct, data)
 ```
 
+### Structure generation
+Since typing out the structure can be quite tedious, `datatyping` provides a tool that does most of the work for you:
+
+``` python
+>>> from datatyping.printer import pprint
+>>> import requests
+>>> r = requests.get('http://httpbin.org/anything')
+>>> pprint(r.json())
+{   
+    'args': dict,
+    'data': str,
+    'files': dict,
+    'form': dict,
+    'headers': {   
+        'Accept': str,
+        'Accept-Encoding': str,
+        'Connection': str,
+        'Host': str,
+        'User-Agent': str,
+    },
+    'json': NoneType,
+    'method': str,
+    'origin': str,
+    'url': str,
+}
+
+```
+
 
 ## Testimonials
 > does the data good
