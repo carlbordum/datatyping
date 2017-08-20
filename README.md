@@ -18,20 +18,11 @@ Safe data validation for greater documentation and maintainability.
 ```
 
 
-## Motivation
-Inspired by ["How Python Makes Working With Data More Difficult in he Long Run"](https://jeffknupp.com/blog/2016/11/13/how-python-makes-working-with-data-more-difficult-in-the-long-run/). In the blog post, the author Jeff Knupp explains that Python is great for interactive data analysis, but once your code is in place, it's hard to see what's really going on, because you can't tell datatypes. E.g. if you data comes from an API you can only later see that some value is truthy or iterable or whatever and there is no way to refer to the structure in your code. This makes it hard to maintain. You really should read the article.
-
-
-## Testimonials
-> does the data good
->> -- [theelous3](https://github.com/theelous3)
-
-
-## Justification
-But type checking is not pythonic at all! Nope, but let's try to justify this lib:
-- Explicit is better than implicit.
-- Readability counts.
-- Unlike most dynamic languages, you can't do `'a' + 1` in Python, because it could cause unwanted errors another place, later in your code. This prevents the same.
+## Benefits
+- Documentation of incoming data in source code.
+- Good for testing (especially if you offer something like a json api).
+- Early failure in a specific spot if data is malformed.
+- Readable, explicit code base.
 
 
 ## Features
@@ -81,7 +72,14 @@ TypeError: -4 is not positive
 >>> validate(struct, data)
 ```
 
+
+## Testimonials
+> does the data good
+>> -- [theelous3](https://github.com/theelous3)
+
+
 ## Notes
+- Inspired by ["How Python Makes Working With Data More Difficult in he Long Run"](https://jeffknupp.com/blog/2016/11/13/how-python-makes-working-with-data-more-difficult-in-the-long-run/).
 - Any and all contributions are welcome.
 - Please open an issue if there's anything you can't make work.
 - Please let me know if there is an unsupported data structure, you'd like to see support for.
