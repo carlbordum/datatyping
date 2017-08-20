@@ -7,7 +7,7 @@ setup(
     url='https://github.com/Zaab1t/datatyping',
     author='Carl Bordum Hansen',
     author_email='carl@bordum.dk',
-    version='0.0.2',
+    version='0.0.3',
     copyright='Copyright (c) 2017 Carl Bordum Hansen',
     license='MIT',
     packages=['datatyping'],
