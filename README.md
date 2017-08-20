@@ -17,6 +17,10 @@ Safe data validation for greater documentation and maintainability.
 >>> datatyping.validate(structure, data)
 ```
 
+``` bash
+pip install git+https://github.com/Zaab1t/datatyping
+```
+
 
 ## Benefits
 - Documentation of incoming data in source code.
