@@ -11,8 +11,14 @@ import contextlib
 
 
 def _new_safe_repr(object, context, maxlevels, level):
-    """Like `pprint._safe_repr`, but prints type name of object instead
-    of object repr except for dictionary keys.
+    """Return object type name except for dict keys.
+    
+    Like `pprint._safe_repr`, but returns type name of object instead
+    of object repr except for dictionary keys. Also formats lists and
+    tuples nicely.
+
+    Used to overwrite `pprint._safe_repr` with the context manager
+    `change_pprint_repr`.
     """
     typerepr = lambda object: type(object).__name__
     type_ = type(object)
@@ -75,15 +81,15 @@ def change_pprint_repr():
 
 
 def pprint(object, stream=None, indent=4, width=80, depth=None,
-          compact=False):
+           compact=False):
     """Pretty-prints the data structure."""
     with change_pprint_repr():
         _pprint.pprint(object, stream=stream, indent=indent, width=width,
-            depth=depth, compact=compact)
+                       depth=depth, compact=compact)
 
 
 def pformat(object, indent=4, width=80, depth=None, compact=False):
     """Return the pretty printed data structure of *object*."""
     with change_pprint_repr():
-        return _pprint.pformat(object, indent=indent,
-            width=width, depth=depth, compact=compact)
+        return _pprint.pformat(object, indent=indent, width=width,
+                               depth=depth, compact=compact)

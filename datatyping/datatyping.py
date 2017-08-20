@@ -5,13 +5,14 @@ __license__ = 'MIT'
 
 class Contract:
     """Ensure that data meets a certain requirement.
-    
+
     Usage:
         >>> class ShortString(Contract):
                 @staticmethod
         ...     def validate(s):
         ...         if len(s) > 5:
-        ...             raise TypeError('%s is too long (%d > 5)' % (s, len(s)))
+        ...             error_msg = '%s is too long (%d > 5)' % (s, len(s))
+        ...             raise TypeError(error_msg)
         ...
         >>> validate([ShortString], ['asdf', 'asdfg', 'asdfgh'])
         TypeError: asdfgh is too long (6 > 5)
@@ -19,13 +20,15 @@ class Contract:
     See Also
     --------
     https://github.com/Zaab1t/datatyping/blob/master/tests/test_contracts.py
+    
     """
+
     def __init__(self, *children):
         self.children = list(children)
 
 
 def validate(structure, data, *, strict=True):
-    """Verifies that values in a dataset has the correct types.
+    """Verify that values in a dataset is of correct types.
 
     Usage:
         >>> validate([str], ['a', 'b', 'c'])
@@ -49,6 +52,7 @@ def validate(structure, data, *, strict=True):
     KeyError
         If a dict in `data` misses a key or `strict` is True and a dict
         has keys not in `structure`.
+
     """
     if isinstance(structure, type) and issubclass(structure, Contract):
         # structure is a class, not an instance
@@ -74,5 +78,6 @@ def validate(structure, data, *, strict=True):
         if strict and len(structure) != len(data):
             raise KeyError(set(structure.keys()) ^ set(data.keys()))
     elif not isinstance(data, structure):  # structure is a type here
-        error_msg = '{} is of type {}, expected type {}'
-        raise TypeError(error_msg.format(data, type(data).__name__, structure.__name__))
+        error_msg = '%s is of type %s, expected type %s' % (
+                data, type(data).__name__, structure.__name__)
+        raise TypeError(error_msg)
