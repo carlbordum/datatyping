@@ -10,6 +10,24 @@ import pprint as _pprint
 import contextlib
 
 
+def _new_format_dict_items(self, items, stream, indent, allowance,
+                           context, level):
+    write = stream.write
+    indent += self._indent_per_level
+    delimnl = ',\n' + ' ' * indent
+    last_index = len(items) - 1
+    for i, (key, ent) in enumerate(items):
+        last = i == last_index
+        rep = repr(key)
+        write(rep)
+        write(': ')
+        self._format(ent, stream, indent + len(rep) + 2,
+                     allowance if last else 1,
+                     context, level)
+        if not last:
+            write(delimnl)
+
+
 def _new_safe_repr(object, context, maxlevels, level):
     """Return object type name except for dict keys.
     
@@ -77,8 +95,11 @@ def _new_safe_repr(object, context, maxlevels, level):
 def change_pprint_repr():
     old_safe_repr = _pprint._safe_repr
     _pprint._safe_repr = _new_safe_repr
+    old_format_dict_items = _pprint.PrettyPrinter._format_dict_items
+    _pprint.PrettyPrinter._format_dict_items = _new_format_dict_items
     yield
     _pprint._safe_repr = old_safe_repr
+    _pprint.PrettyPrinter._format_dict_items = old_format_dict_items
 
 
 def pprint(object, stream=None, indent=4, width=80, depth=None,
