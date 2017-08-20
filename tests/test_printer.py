@@ -12,3 +12,11 @@ def test_simple_strs():
 
 def test_simple_mix():
     assert pformat(['a', 1, 2, 'b']) == '[str, int, int, str]'
+
+
+def test_simple_dict():
+    assert pformat({'a': 1, 'b': 2}) == "{'a': int, 'b': int}"
+
+
+def test_dict_mix():
+    assert pformat({'a': [1, 2, 3], 'b': 'c'}) == "{'a': [int], 'b': str}"
