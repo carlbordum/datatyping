@@ -1,4 +1,4 @@
-"""Like pprint, but with types."""
+"""Like pprint, but with types except for dictionary keys."""
 
 
 __all__ = ['pprint', 'pformat']
@@ -11,6 +11,9 @@ import contextlib
 
 
 def _new_safe_repr(object, context, maxlevels, level):
+    """Like `pprint._safe_repr`, but prints type name of object instead
+    of object repr except for dictionary keys.
+    """
     typerepr = lambda object: type(object).__name__
     type_ = type(object)
     if type_ in _pprint._builtin_scalars:
@@ -26,7 +29,8 @@ def _new_safe_repr(object, context, maxlevels, level):
         level += 1
         pairs = []
         for k, v in object.items():
-            vrepr, vreadable, recur = _new_safe_repr(v, context, maxlevels, level)
+            vrepr, vreadable, recur = _new_safe_repr(
+                v, context, maxlevels, level)
             pairs.append('%s: %s' % (repr(k), vrepr))
             readable = readable and vreadable
             if recur:
@@ -48,7 +52,8 @@ def _new_safe_repr(object, context, maxlevels, level):
         items = []
         level += 1
         for item in object:
-            irepr, ireadable, irecur = _new_safe_repr(item, context, maxlevels, level)
+            irepr, ireadable, irecur = _new_safe_repr(
+                item, context, maxlevels, level)
             items.append(irepr)
             if not ireadable:
                 readable = False
@@ -71,16 +76,14 @@ def change_pprint_repr():
 
 def pprint(object, stream=None, indent=4, width=80, depth=None,
           compact=False):
-    """Pretty-prints the data structure, but prints types instead of most
-    values. Arguments are passed on to pprint.pprint. This means that
-    this function prints to stdout if *stream* is None.
-    """
+    """Pretty-prints the data structure."""
     with change_pprint_repr():
         _pprint.pprint(object, stream=stream, indent=indent, width=width,
             depth=depth, compact=compact)
 
 
 def pformat(object, indent=4, width=80, depth=None, compact=False):
+    """Return the pretty printed data structure of *object*."""
     with change_pprint_repr():
         return _pprint.pformat(object, indent=indent,
             width=width, depth=depth, compact=compact)
