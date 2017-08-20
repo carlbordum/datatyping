@@ -28,7 +28,7 @@ def _new_safe_repr(object, context, maxlevels, level):
     r = getattr(type_, '__repr__', None)
     if issubclass(type_, dict) and r is dict.__repr__:
         if not object:
-            return '{}', True, False
+            return 'dict', True, False
         context[id(object)] = 1
         readable = True
         recursive = False
@@ -37,6 +37,7 @@ def _new_safe_repr(object, context, maxlevels, level):
         for k, v in object.items():
             vrepr, vreadable, recur = _new_safe_repr(
                 v, context, maxlevels, level)
+            print(repr(k), vrepr)
             pairs.append('%s: %s' % (repr(k), vrepr))
             readable = readable and vreadable
             if recur:
@@ -46,11 +47,11 @@ def _new_safe_repr(object, context, maxlevels, level):
     if issubclass(type_, (list, tuple)):
         if issubclass(type_, list):
             if not object:
-                return '[]', True, False
+                return 'list', True, False
             format = '[%s]'
         else:  # its a tuple
             if not object:
-                return '()', True, False
+                return 'tuple', True, False
             format = '(%s)' if len(object) != 1 else '(%s,)'
         context[id(object)] = 1
         readable = True
