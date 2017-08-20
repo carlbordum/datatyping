@@ -14,18 +14,22 @@ def _new_format_dict_items(self, items, stream, indent, allowance,
                            context, level):
     write = stream.write
     indent += self._indent_per_level
-    delimnl = ',\n' + ' ' * indent
     last_index = len(items) - 1
+    write('\n')
+    write(' ' * indent)
     for i, (key, ent) in enumerate(items):
         last = i == last_index
         rep = repr(key)
         write(rep)
         write(': ')
-        self._format(ent, stream, indent + len(rep) + 2,
+        self._format(ent, stream, indent,
                      allowance if last else 1,
                      context, level)
-        if not last:
-            write(delimnl)
+        write(',\n')
+        if last:
+            write((' ' * indent)[:-self._indent_per_level])
+        else:
+            write(' ' * indent)
 
 
 def _new_safe_repr(object, context, maxlevels, level):
@@ -55,7 +59,6 @@ def _new_safe_repr(object, context, maxlevels, level):
         for k, v in object.items():
             vrepr, vreadable, recur = _new_safe_repr(
                 v, context, maxlevels, level)
-            print(repr(k), vrepr)
             pairs.append('%s: %s' % (repr(k), vrepr))
             readable = readable and vreadable
             if recur:

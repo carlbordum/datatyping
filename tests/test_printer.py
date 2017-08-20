@@ -24,18 +24,22 @@ def test_dict_mix():
 
 
 def test_advanced():
-    expected = ("{   'args': dict,"
+    expected = ("{   "
+    "\n    'args': dict,"
     "\n    'data': str,"
     "\n    'files': dict,"
     "\n    'form': dict,"
-    "\n    'headers': {   'Accept': str,"
-    "\n                   'Accept-Encoding': str,"
-    "\n                   'Connection': str,"
-    "\n                   'Host': str,"
-    "\n                   'User-Agent': str},"
+    "\n    'headers': {   "
+    "\n        'Accept': str,"
+    "\n        'Accept-Encoding': str,"
+    "\n        'Connection': str,"
+    "\n        'Host': str,"
+    "\n        'User-Agent': str,"
+    "\n    },"
     "\n    'json': NoneType,"
     "\n    'method': str,"
     "\n    'origin': str,"
-    "\n    'url': str}")
-    r = requests.get('http://httpbin.org/anything')
+    "\n    'url': str,"
+    "\n}")
+    r = requests.get('http://httpbin.org/anything', timeout=2)
     assert pformat(r.json()) == expected
