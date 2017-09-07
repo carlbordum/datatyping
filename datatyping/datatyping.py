@@ -8,7 +8,7 @@ class Contract:
 
     Usage:
         >>> class ShortString(Contract):
-                @staticmethod
+        ...     @staticmethod
         ...     def validate(s):
         ...         if len(s) > 5:
         ...             error_msg = '%s is too long (%d > 5)' % (s, len(s))
@@ -55,8 +55,7 @@ def validate(structure, data, *, strict=True):
 
     """
     if isinstance(structure, type) and issubclass(structure, Contract):
-        # structure is a class, not an instance
-        structure.validate(data)
+        structure.validate(data)  # structure is a `Contract` class
     elif isinstance(structure, Contract):
         if len(structure.children) == 1:
             for item in data:
