@@ -55,8 +55,9 @@ def validate(structure, data, *, strict=True):
 
     """
     if isinstance(structure, type) and issubclass(structure, Contract):
-        structure.validate(data)  # structure is a `Contract` class
+        structure.validate(data)  # *structure* is a `Contract` class
     elif isinstance(structure, Contract):
+        # *structure* is a sequence
         if len(structure.children) == 1:
             for item in data:
                 validate(structure.children[0], item, strict=strict)
