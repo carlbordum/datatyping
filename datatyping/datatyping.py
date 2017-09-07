@@ -65,12 +65,14 @@ def validate(structure, data, *, strict=True):
             assert len(structure.children) == len(data)
             for type_, item in zip(structure.children, data):
                 validate(type_, item, strict=strict)
-    elif isinstance(data, list) and len(structure) == 1:
-        for item in data:
-            validate(structure[0], item, strict=strict)
-    elif isinstance(structure, list) and isinstance(data, list):
-        for item, type_ in zip(data, structure):
-            validate(type_, item, strict=strict)
+    elif isinstance(data, (list, tuple)):
+        assert isinstance(data, type(structure))
+        if len(structure) == 1:
+            for item in data:
+                validate(structure[0], item, strict=strict)
+        else:
+            for item, type_ in zip(data, structure):
+                validate(type_, item, strict=strict)
     elif isinstance(structure, dict):
         for key, type_ in structure.items():
             item = data[key]
