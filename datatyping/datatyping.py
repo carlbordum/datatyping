@@ -3,7 +3,10 @@ __author__ = 'Carl Bordum Hansen'
 __license__ = 'MIT'
 
 
-class Contract:
+import collections.abc
+
+
+class Contract(collections.abc.Sequence):
     """Ensure that data meets a certain requirement.
 
     Usage:
@@ -28,9 +31,6 @@ class Contract:
 
     def __len__(self):
         return len(self.children)
-
-    def __iter__(self):
-        return iter(self.children)
 
     def __getitem__(self, i):
         return self.children[i]
@@ -65,7 +65,7 @@ def validate(structure, data, *, strict=True):
     """
     if isinstance(structure, type) and issubclass(structure, Contract):
         structure.validate(data)  # *structure* is a `Contract` class
-    elif isinstance(structure, (list, tuple, Contract)):
+    elif isinstance(structure, collections.abc.Sequence):
         # if *structure* is `Contract` it's a sequence
         if len(structure) == 1:
             for item in data:
