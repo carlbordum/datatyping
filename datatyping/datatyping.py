@@ -26,6 +26,15 @@ class Contract:
     def __init__(self, *children):
         self.children = list(children)
 
+    def __len__(self):
+        return len(self.children)
+
+    def __iter__(self):
+        return iter(self.children)
+
+    def __getitem__(self, i):
+        return self.children[i]
+
 
 def validate(structure, data, *, strict=True):
     """Verify that values in a dataset is of correct types.
@@ -56,22 +65,14 @@ def validate(structure, data, *, strict=True):
     """
     if isinstance(structure, type) and issubclass(structure, Contract):
         structure.validate(data)  # *structure* is a `Contract` class
-    elif isinstance(structure, Contract):
-        # *structure* is a sequence
-        if len(structure.children) == 1:
-            for item in data:
-                validate(structure.children[0], item, strict=strict)
-        else:
-            assert len(structure.children) == len(data), 'Malformed structure'
-            for type_, item in zip(structure.children, data):
-                validate(type_, item, strict=strict)
-    elif isinstance(data, (list, tuple)):
-        assert isinstance(data, type(structure))
+    elif isinstance(structure, (list, tuple, Contract)):
+        # if *structure* is `Contract` it's a sequence
         if len(structure) == 1:
             for item in data:
                 validate(structure[0], item, strict=strict)
         else:
-            for item, type_ in zip(data, structure):
+            assert len(structure) == len(data), 'Malformed structure'
+            for type_, item in zip(structure, data):
                 validate(type_, item, strict=strict)
     elif isinstance(structure, dict):
         for key, type_ in structure.items():
