@@ -20,7 +20,7 @@ def test_dict_empty():
 
 
 def test_dict_strict():
-    assert validate([{'a': int}], [{'a': 123,}, {'a': 456}]) is None
+    assert validate([{'a': int}], [{'a': 123}, {'a': 456}]) is None
 
 
 def test_dict_nested():
