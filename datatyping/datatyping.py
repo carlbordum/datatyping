@@ -62,7 +62,7 @@ def validate(structure, data, *, strict=True):
             for item in data:
                 validate(structure.children[0], item, strict=strict)
         else:
-            assert len(structure.children) == len(data)
+            assert len(structure.children) == len(data), 'Malformed structure'
             for type_, item in zip(structure.children, data):
                 validate(type_, item, strict=strict)
     elif isinstance(data, (list, tuple)):
