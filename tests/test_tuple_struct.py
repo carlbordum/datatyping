@@ -29,8 +29,3 @@ def test_dict_nested():
             {'a': {'b': ({}, {})}},
             {'a': {'b': ({'any': 'key'}, {'used': 'here'})}},
         )) is None
-
-
-def test_list_error():
-    with pytest.raises(AssertionError):
-        validate([int], (1, 2, 3))
