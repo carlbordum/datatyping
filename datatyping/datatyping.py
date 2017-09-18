@@ -23,7 +23,7 @@ class Contract(collections.abc.Sequence):
     See Also
     --------
     https://github.com/Zaab1t/datatyping/blob/master/tests/test_contracts.py
-    
+
     """
 
     def __init__(self, *children):
@@ -65,8 +65,9 @@ def validate(structure, data, *, strict=True):
     """
     if isinstance(structure, type) and issubclass(structure, Contract):
         structure.validate(data)  # *structure* is a `Contract` class
-    elif isinstance(structure, collections.abc.Sequence):
-        # if *structure* is `Contract` it's a sequence
+    elif (isinstance(structure, collections.abc.Sequence)
+            and not isinstance(data, str)):
+        # if *structure* is `Contract` it's a sequence contract
         if len(structure) == 1:
             for item in data:
                 validate(structure[0], item, strict=strict)
