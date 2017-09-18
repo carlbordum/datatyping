@@ -56,7 +56,8 @@ KeyError: {'b'}
 >>> validate([PositiveInteger], [1, 2, 3, 4])
 >>> validate([PositiveInteger], [1, 2, 3, -4])
 TypeError: -4 is not positive
->>> # with lists
+>>>
+>>> # sequence contracts
 >>> class TwoItemList(Contract):
 ...     @staticmethod
 ...     def validate(l):
@@ -111,8 +112,8 @@ Since typing out the structure can be quite tedious, `datatyping` provides a too
 
 
 ## Notes
-- Inspired by ["How Python Makes Working With Data More Difficult in he Long Run"](https://jeffknupp.com/blog/2016/11/13/how-python-makes-working-with-data-more-difficult-in-the-long-run/).
+- Inspired by ["How Python Makes Working With Data More Difficult in the Long Run"](https://jeffknupp.com/blog/2016/11/13/how-python-makes-working-with-data-more-difficult-in-the-long-run/).
 - Any and all contributions are welcome.
-- Please open an issue if there's anything you can't make work.
+- Please open an issue if there's anything you can't make work (read: I messed up).
 - Please let me know if there is an unsupported data structure, you'd like to see support for.
-- If you enjoy and use the software, you can [say thanks](https://saythanks.io/to/Zaab1t).
+- If you enjoy and use the software, you can [say thanks](https://saythanks.io/to/Zaab1t) :)
