@@ -1,4 +1,4 @@
-__all__ = ['validate', 'Contract']
+__all__ = ['validate', 'customtype']
 __author__ = 'Carl Bordum Hansen'
 __license__ = 'MIT'
 
@@ -6,34 +6,12 @@ __license__ = 'MIT'
 import collections.abc
 
 
-class Contract(collections.abc.Sequence):
-    """Ensure that data meets a certain requirement.
+class CustomType:
+    def __init__(self, function):
+        self.validate = function
 
-    Usage:
-        >>> class ShortString(Contract):
-        ...     @staticmethod
-        ...     def validate(s):
-        ...         if len(s) > 5:
-        ...             error_msg = '%s is too long (%d > 5)' % (s, len(s))
-        ...             raise TypeError(error_msg)
-        ...
-        >>> validate([ShortString], ['asdf', 'asdfg', 'asdfgh'])
-        TypeError: asdfgh is too long (6 > 5)
 
-    See Also
-    --------
-    https://github.com/Zaab1t/datatyping/blob/master/tests/test_contracts.py
-
-    """
-
-    def __init__(self, *children):
-        self.children = list(children)
-
-    def __len__(self):
-        return len(self.children)
-
-    def __getitem__(self, i):
-        return self.children[i]
+customtype = CustomType
 
 
 def validate(structure, data, *, strict=True):
@@ -63,11 +41,8 @@ def validate(structure, data, *, strict=True):
         has keys not in `structure`.
 
     """
-    if isinstance(structure, type) and issubclass(structure, Contract):
-        structure.validate(data)  # *structure* is a `Contract` class
-    elif (isinstance(structure, collections.abc.Sequence)
+    if (isinstance(structure, collections.abc.Sequence)
             and not isinstance(data, str)):
-        # if *structure* is `Contract` it's a sequence contract
         if len(structure) == 1:
             for item in data:
                 validate(structure[0], item, strict=strict)
@@ -81,6 +56,8 @@ def validate(structure, data, *, strict=True):
             validate(type_, item, strict=strict)
         if strict and len(structure) != len(data):
             raise KeyError(set(structure.keys()) ^ set(data.keys()))
+    elif isinstance(structure, CustomType):
+        structure.validate(data)
     elif not isinstance(data, structure):  # structure is a type here
         error_msg = '%s is of type %s, expected type %s' % (
                 data, type(data).__name__, structure.__name__)
