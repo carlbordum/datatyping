@@ -50,7 +50,7 @@ def validate(structure, data, *, strict=True):
             assert len(structure) == len(data), 'Malformed structure'
             for type_, item in zip(structure, data):
                 validate(type_, item, strict=strict)
-    elif isinstance(structure, dict):
+    elif isinstance(structure, collections.abc.Mapping):
         for key, type_ in structure.items():
             item = data[key]
             validate(type_, item, strict=strict)
