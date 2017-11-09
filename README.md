@@ -91,6 +91,19 @@ Since typing out the structure can be quite tedious, `datatyping` provides a too
 >> -- [theelous3](https://github.com/theelous3)
 
 
+## Develop with me :)
+
+``` bash
+# fork it
+$ git clone https://github.com/your_name/datatyping
+$ cd datatyping
+$ sudo python3 setup.py develop
+# make your changes, commit and push
+$ python3 -m pytest
+# submit a pull request
+```
+
+
 ## Notes
 - Inspired by ["How Python Makes Working With Data More Difficult in the Long Run"](https://jeffknupp.com/blog/2016/11/13/how-python-makes-working-with-data-more-difficult-in-the-long-run/).
 - Any and all contributions are welcome.
