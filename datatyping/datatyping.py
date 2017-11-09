@@ -4,6 +4,7 @@ __license__ = 'MIT'
 
 
 import collections.abc
+import reprlib
 
 
 def customtype(check_function):
@@ -56,6 +57,9 @@ def validate(structure, data, *, strict=True):
     ------
     TypeError
         If an elements in `data` has wrong type.
+    ValueError
+        If the length of `structure` doesn't make sense for validating
+        `data`.
     KeyError
         If a dict in `data` misses a key or `strict` is True and a dict
         has keys not in `structure`.
@@ -69,7 +73,10 @@ def validate(structure, data, *, strict=True):
             for item in data:
                 validate(structure[0], item, strict=strict)
         else:
-            assert len(structure) == len(data), 'Malformed structure'
+            if len(structure) != len(data):
+                error_msg = ('%s has the wrong length. Expected %d, got %d.'
+                        ) % (reprlib.repr(data), len(structure), len(data))
+                raise ValueError(error_msg)
             for type_, item in zip(structure, data):
                 validate(type_, item, strict=strict)
     elif isinstance(structure, collections.abc.Mapping):
