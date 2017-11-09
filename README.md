@@ -1,5 +1,6 @@
 # datatyping
-Safe data validation for greater documentation and maintainability.
+Datatyping lets you define a datastructure of types and then verify that your
+data is well-formed!
 
 ``` python
 >>> import datatyping
@@ -26,7 +27,7 @@ pip install git+https://github.com/Zaab1t/datatyping
 - Documentation of incoming data in source code.
 - Good for testing (especially if you offer something like a json api).
 - Early failure in a specific spot if data is malformed.
-- Readable, explicit code base.
+- Readable, explicit code base helps maintainability.
 
 
 ## Features
