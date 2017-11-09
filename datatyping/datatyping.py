@@ -6,12 +6,28 @@ __license__ = 'MIT'
 import collections.abc
 
 
-class CustomType:
-    def __init__(self, function):
-        self.validate = function
+def customtype(check_function):
+    """Decorate a function, so it can be used for type checking.
 
+    Usage:
+        @customtype
+        def two_item_list(l):
+            if len(l) != 2:
+                raise TypeError('length %d!!!' % len(l))
 
-customtype = CustomType
+        validate([two_item_list], [[1, 2], [3, 4]])  # passes
+        validate([two_item_list], [[1, 2], [3, 4, 5]])  # TypeError
+
+    Sets the `check_function.__datatyping_validate` attribute.
+
+    Parameters
+    ----------
+    check_function : function
+        Function that should be used to type check.
+
+    """
+    check_function.__datatyping_validate = True
+    return check_function
 
 
 def validate(structure, data, *, strict=True):
@@ -41,7 +57,9 @@ def validate(structure, data, *, strict=True):
         has keys not in `structure`.
 
     """
-    if (isinstance(structure, collections.abc.Sequence)
+    if hasattr(structure, '__datatyping_validate'):
+        structure(data)
+    elif (isinstance(structure, collections.abc.Sequence)
             and not isinstance(data, str)):
         if len(structure) == 1:
             for item in data:
@@ -51,13 +69,11 @@ def validate(structure, data, *, strict=True):
             for type_, item in zip(structure, data):
                 validate(type_, item, strict=strict)
     elif isinstance(structure, collections.abc.Mapping):
-        for key, type_ in structure.items():
-            item = data[key]
-            validate(type_, item, strict=strict)
         if strict and len(structure) != len(data):
             raise KeyError(set(structure.keys()) ^ set(data.keys()))
-    elif isinstance(structure, CustomType):
-        structure.validate(data)
+        for key, type_ in structure.items():
+            item = data[key]  # or KeyError :)
+            validate(type_, item, strict=strict)
     elif not isinstance(data, structure):  # structure is a type here
         error_msg = '%s is of type %s, expected type %s' % (
                 data, type(data).__name__, structure.__name__)
