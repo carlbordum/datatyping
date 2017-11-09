@@ -1,5 +1,5 @@
 # datatyping
-Datatyping lets you define a datastructure of types and then verify that your
+datatyping lets you define a data structure of types and then verify that your
 data is well-formed!
 
 ``` python
@@ -18,9 +18,13 @@ data is well-formed!
 >>> datatyping.validate(structure, data)
 ```
 
-``` bash
-pip install git+https://github.com/Zaab1t/datatyping
-```
+
+## Install
+Latest release:
+`pip install datatyping`
+
+Development version:
+`pip install git+https://github.com/Zaab1t/datatyping`
 
 
 ## Benefits
