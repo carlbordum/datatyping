@@ -44,6 +44,10 @@ def validate(structure, data, *, strict=True):
 
     Parameters
     ----------
+    structure : type or collection of types
+        The data structure that `data` should follow.
+    data : anything
+        The data you want type checked.
     strict : bool
         Dicts in `data` must have the **exact** keys specified in
         `structure`. No more.
