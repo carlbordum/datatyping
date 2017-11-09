@@ -1,4 +1,12 @@
 # Changelog
+## 0.5.0 (2017-11-09)
+- Replaced "contracts" with @customtype
+- Works with all `collections.abc.Mapping` instead of just dicts.
+- `validate` throws ValueError instead of undocumented AssertionError.
+- New description: "Pythonic type checking"
+- First PyPI release!
+
+
 ## 0.4.0 (2017-09-18)
 - Added support for tuples
 - Fixed bug with str (not considered sequence anymore)
