@@ -7,6 +7,8 @@ python:
     - "3.6"
     - "nightly"
 
+cache: pip
+
 install:
     - ./setup.py develop
 
