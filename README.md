@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Zaab1t/datatyping.svg?branch=master)](https://travis-ci.org/Zaab1t/datatyping)
+
+
 # datatyping
 datatyping lets you define a data structure of types and then verify that your
 data is well-formed!
