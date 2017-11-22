@@ -10,7 +10,7 @@ python:
 cache: pip
 
 install:
-    - ./setup.py develop
+    - python setup.py install
 
 script:
     - pytest --verbose --tb=native
