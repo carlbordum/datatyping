@@ -98,7 +98,10 @@ def _new_safe_repr(object, context, maxlevels, level):
 def change_pprint_repr():
     old_safe_repr = _pprint._safe_repr
     _pprint._safe_repr = _new_safe_repr
-    old_format_dict_items = _pprint.PrettyPrinter._format_dict_items
+    try:
+        old_format_dict_items = _pprint.PrettyPrinter._format_dict_items
+    except AttributeError:
+        raise RuntimeError("Only Python3.5+ supported (datatyping.printer)")
     _pprint.PrettyPrinter._format_dict_items = _new_format_dict_items
     yield
     _pprint._safe_repr = old_safe_repr
