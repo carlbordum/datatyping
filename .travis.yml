@@ -6,6 +6,7 @@ python:
     - "3.5"
     - "3.6"
     - "nightly"
+    - "pypy-5.3.1"
 
 cache: pip
 
