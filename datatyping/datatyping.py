@@ -68,24 +68,26 @@ def validate(structure, data, *, strict=True):
     if hasattr(structure, '__datatyping_validate'):
         structure(data)
     elif (isinstance(structure, collections.abc.Sequence)
-            and not isinstance(data, str)):
+          and not isinstance(data, str)):
         if len(structure) == 1:
             for item in data:
                 validate(structure[0], item, strict=strict)
         else:
             if len(structure) != len(data):
-                error_msg = ('%s has the wrong length. Expected %d, got %d.'
-                        ) % (reprlib.repr(data), len(structure), len(data))
+                error_msg = (
+                    '%s has the wrong length. Expected %d, got %d.'
+                ) % (reprlib.repr(data), len(structure), len(data))
                 raise ValueError(error_msg)
             for type_, item in zip(structure, data):
                 validate(type_, item, strict=strict)
     elif isinstance(structure, collections.abc.Mapping):
         if strict and len(structure) != len(data):
-            raise KeyError(set(structure.keys()) ^ set(data.keys()))
+            raise KeyError(reprlib.repr(
+                set(structure.keys()) ^ set(data.keys())))
         for key, type_ in structure.items():
             item = data[key]  # or KeyError :)
             validate(type_, item, strict=strict)
     elif not isinstance(data, structure):  # structure is a type here
         error_msg = '%s is of type %s, expected type %s' % (
-                data, type(data).__name__, structure.__name__)
+            reprlib.repr(data), type(data).__name__, structure.__name__)
         raise TypeError(error_msg)
