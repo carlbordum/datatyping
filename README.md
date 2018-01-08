@@ -8,11 +8,11 @@ data is well-formed!
 ``` python
 >>> import datatyping
 >>> structure = {
-...     'id': int,
+...     'response_code': int,
 ...     'cars': [{'model': str, 'passengers': int}],
 ... }
 >>> data = {
-...     'id': 215,
+...     'response_code': 215,
 ...     'cars': [
 ...         {'model': 'Cadillac', 'passengers': 2},
 ...         {'model': 'Volvo', 'passengers': 4},
@@ -33,25 +33,25 @@ Development version:
 ## Benefits
 - Documentation of incoming data in source code.
 - Good for testing (especially if you offer something like a json api).
-- Early failure in a specific spot if data is malformed.
+- Early failure in a specific spot if data is malformed or changed.
 - Readable, explicit code base helps maintainability.
 
 
 ## Features
 ### Basics
 ``` python
->>> from datatyping import validate
->>> # Working with lists
 >>> validate([int, str], [1, 'a'])
->>> validate([dict], [{'can have': 1}, {'any keys': 2}])
 >>> validate([[int], [str]], [[1, 2, 3], ['a', 'b', 'c'])
->>> 
->>> # Working with dicts
+```
+
+``` python
+>>> validate([dict], [{'can have': 1}, {'any keys': 2}])
 >>> validate({'a': int, 'b': str}, {'a': 4, 'b': 'c'})
 >>> validate({'a': int}, {'a': 2, 'b': 'oops'})
 KeyError: {'b'}
 >>> validate({'a': int}, {'a': 2, 'b': 'yay'}, strict=False)
 ```
+
 ### Custom types
 ``` python
 >>> from datatyping import validate, customtype
