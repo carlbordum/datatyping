@@ -10,16 +10,20 @@ import reprlib
 def customtype(check_function):
     """Decorate a function, so it can be used for type checking.
 
-    Usage:
-        @customtype
-        def two_item_list(l):
-            if len(l) != 2:
-                raise TypeError('length %d!!!' % len(l))
+    Example
+    -------
+        >>> @customtype
+        ... def two_item_list(lst):
+        ...     if len(lst) != 2:
+        ...         raise TypeError('length %d!!!' % len(lst))
+        ...
+        >>> validate([two_item_list], [[1, 2], [3, 4]])
+        >>> validate([two_item_list], [[1, 2], [3, 4, 5]])
+        TypeError: length 3!!!
 
-        validate([two_item_list], [[1, 2], [3, 4]])  # passes
-        validate([two_item_list], [[1, 2], [3, 4, 5]])  # TypeError
-
-    Sets the `check_function.__datatyping_validate` attribute.
+    Note
+    ----
+        Sets the `check_function.__datatyping_validate` attribute.
 
     Parameters
     ----------
@@ -32,14 +36,15 @@ def customtype(check_function):
 
 
 def validate(structure, data, *, strict=True):
-    """Verify that values in a dataset is of correct types.
+    """Verify that values in a dataset are of correct types.
 
-    Usage:
+    Example
+    -------
         >>> validate([str], ['a', 'b', 'c'])
         >>> validate(
-                {'id': int, 'lucky_numbers': [int]},
-                {'id': 700, 'lucky_numbers': [1, 3, 7, 13]}
-            )
+        ...     {'id': int, 'lucky_numbers': [int]},
+        ...     {'id': 700, 'lucky_numbers': [1, 3, 7, 13]}
+        ... )
         >>> validate([int], [1, 2, 3, 4.5])
         TypeError: 4.5 is of type float, expected type int.
 
