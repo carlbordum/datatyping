@@ -22,6 +22,7 @@ Develop with me :)
 ------------------
 
 .. code-block:: bash
+
     # fork it
     $ git clone https://github.com/your_name/datatyping
     $ cd datatyping
