@@ -33,7 +33,7 @@ Develop with me :)
 
 Notes
 -----
-* Inspired by `"How Python Makes Working With Data More Difficult in the Long Run"` <https://jeffknupp.com/blog/2016/11/13/how-python-makes-working-with-data-more-difficult-in-the-long-run/>`_.
+* Inspired by `"How Python Makes Working With Data More Difficult in the Long Run" <https://jeffknupp.com/blog/2016/11/13/how-python-makes-working-with-data-more-difficult-in-the-long-run/>`_.
 * Any and all contributions are welcome.
 * Please open an issue if there's anything you can't make work (read: I messed up).
 * Please let me know if there is an unsupported data structure, you'd like to see support for.
