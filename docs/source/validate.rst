@@ -3,7 +3,7 @@ Getting Started
 
 The bread and butter of `datatyping` is the `validate` function.
 
-.. autofunction:: datatyping.datatyping.validate
+.. autofunction:: datatyping.validate
 
 Examples
 --------

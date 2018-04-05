@@ -6,7 +6,7 @@ Special constraints can be imposed with this handy decorater.
 datatyping.customtype
 ---------------------
 
-.. autofunction:: datatyping.datatyping.customtype
+.. autofunction:: datatyping.customtype
 
 Example
 -------
