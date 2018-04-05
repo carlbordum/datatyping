@@ -21,19 +21,33 @@ Testimonials
 Develop with me :)
 ------------------
 
+Fork the repo first. Use the following lines to setup::
+
 .. code-block:: bash
 
-    # fork it
     $ git clone https://github.com/your_name/datatyping
     $ cd datatyping
-    $ sudo python3 setup.py develop
-    # make your changes, commit and push
-    $ python3 -m pytest
-    # submit a pull request
+    $ virtualenv venv
+    $ . venv/bin/activate
+    $ python setup.py develop
+
+Run tests::
+
+.. code-block:: bash
+
+    $ pip install pytest
+    $ python -m pytest
+
+Build documentation::
+
+.. code-block:: bash
+
+    $ make -C docs/ html
+
 
 Notes
 -----
 * Inspired by `"How Python Makes Working With Data More Difficult in the Long Run" <https://jeffknupp.com/blog/2016/11/13/how-python-makes-working-with-data-more-difficult-in-the-long-run/>`_.
 * Any and all contributions are welcome.
-* Please open an issue if there's anything you can't make work (read: I messed up).
-* Please let me know if there is an unsupported data structure, you'd like to see support for.
+* Please open an issue if you need help (read: I messed up).
+* Suggest anything you want to see support for!
