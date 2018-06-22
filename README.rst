@@ -7,21 +7,22 @@ datatyping
 .. image:: https://readthedocs.org/projects/datatyping/badge/?version=latest
     :target: http://datatyping.readthedocs.io
 
-Verify whether data is malformed with an intuitive syntax :)
+Datatyping is a (pure) Python library with no dependencies that you can use to
+verify whether elements in a data structure has the expected types. Great for
+incomming json.
 
-`lightweight, pure python, no dependencides`
+.. code-block:: python
 
-`Check the documentation! <http://datatyping.readthedocs.io>`_
+    datatyping.validate([int], [1, 2, 3])
 
-Testimonials
-------------
-| does the data good
->> `theelous3 <https://github.com/theelous3>`_
+Check out the `documentation<http://datatyping.readthedocs.io>`_ for examples,
+installation instructions and usage.
+
 
 Develop with me :)
 ------------------
 
-Fork the repo first. Use the following lines to setup::
+Fork the repo first. Use the following lines to setup
 
 .. code-block:: bash
 
@@ -31,14 +32,14 @@ Fork the repo first. Use the following lines to setup::
     $ . venv/bin/activate
     $ python setup.py develop
 
-Run tests::
+Run tests
 
 .. code-block:: bash
 
     $ pip install pytest
     $ python -m pytest
 
-Build documentation::
+Build documentation
 
 .. code-block:: bash
 
