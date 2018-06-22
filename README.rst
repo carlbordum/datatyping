@@ -7,15 +7,17 @@ datatyping
 .. image:: https://readthedocs.org/projects/datatyping/badge/?version=latest
     :target: http://datatyping.readthedocs.io
 
+
 Datatyping is a (pure) Python library with no dependencies that you can use to
 verify whether elements in a data structure has the expected types. Great for
 incomming json.
 
 .. code-block:: python
 
+    import datatyping
     datatyping.validate([int], [1, 2, 3])
 
-Check out the `documentation<http://datatyping.readthedocs.io>`_ for examples,
+Check out the `documentation <http://datatyping.readthedocs.io>`_ for examples,
 installation instructions and usage.
 
 
