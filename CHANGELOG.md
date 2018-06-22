@@ -1,4 +1,11 @@
 # Changelog
+## 0.6.0 (2017-11-09)
+- Better exception messages with `reprlib.repr`
+- External documentation (http://datatyping.rtfd.io)
+- Checks that types are actually the same or a subclass instead of just of the
+    same abstract type Sequence/Mapping
+
+
 ## 0.5.0 (2017-11-09)
 - Replaced "contracts" with @customtype
 - Works with all `collections.abc.Mapping` instead of just dicts.
