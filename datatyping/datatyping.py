@@ -7,6 +7,11 @@ import collections.abc
 import reprlib
 
 
+# Open questions:
+#     how should sets be handled?
+#     should we handle collections.abc.MappingView?
+
+
 def _make_typeerror(structure, data):
     error_msg = "%s is of type %s, expected type %s" % (
         reprlib.repr(data),
