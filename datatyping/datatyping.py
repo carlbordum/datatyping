@@ -7,6 +7,15 @@ import collections.abc
 import reprlib
 
 
+def _make_typeerror(structure, data):
+    error_msg = "%s is of type %s, expected type %s" % (
+        reprlib.repr(data),
+        data.__class__.__name__,
+        structure.__class__.__name__,
+    )
+    return TypeError(error_msg)
+
+
 def customtype(check_function):
     """Decorate a function, so it can be used for type checking.
 
@@ -73,20 +82,24 @@ def validate(structure, data, *, strict=True):
     if hasattr(structure, "__datatyping_validate"):
         structure(data)
     elif isinstance(structure, collections.abc.Sequence) and not isinstance(data, str):
+        if not isinstance(data, type(structure)):
+            raise _make_typeerror(structure, data)
         if len(structure) == 1:
             for item in data:
                 validate(structure[0], item, strict=strict)
-        else:
-            if len(structure) != len(data):
-                error_msg = ("%s has the wrong length. Expected %d, got %d.") % (
-                    reprlib.repr(data),
-                    len(structure),
-                    len(data),
-                )
-                raise ValueError(error_msg)
-            for type_, item in zip(structure, data):
-                validate(type_, item, strict=strict)
+            return  # success
+        if len(structure) != len(data):
+            error_msg = ("%s has the wrong length. Expected %d, got %d.") % (
+                reprlib.repr(data),
+                len(structure),
+                len(data),
+            )
+            raise ValueError(error_msg)
+        for type_, item in zip(structure, data):
+            validate(type_, item, strict=strict)
     elif isinstance(structure, collections.abc.Mapping):
+        if not isinstance(data, type(structure)):
+            raise _make_typeerror(structure, data)
         if strict and len(structure) != len(data):
             raise KeyError(reprlib.repr(set(structure.keys()) ^ set(data.keys())))
         for key, type_ in structure.items():
@@ -95,7 +108,7 @@ def validate(structure, data, *, strict=True):
     elif not isinstance(data, structure):  # structure is a type here
         error_msg = "%s is of type %s, expected type %s" % (
             reprlib.repr(data),
-            type(data).__name__,
+            data.__class__.__name__,
             structure.__name__,
         )
         raise TypeError(error_msg)
