@@ -1,8 +1,8 @@
 datatyping
 ==========
 
-.. image:: https://travis-ci.org/Zaab1t/datatyping.svg?branch=master
-    :target: https://travis-ci.org/Zaab1t/datatyping
+.. image:: https://travis-ci.org/carlbordum/datatyping.svg?branch=master
+    :target: https://travis-ci.org/carlbordum/datatyping
 
 .. image:: https://readthedocs.org/projects/datatyping/badge/?version=latest
     :target: http://datatyping.readthedocs.io

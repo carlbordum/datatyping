@@ -8,7 +8,7 @@ setup(
     description='Pythonic type checking',
     long_description=long_description,
     keywords='safe data validation typing type check',
-    url='https://github.com/Zaab1t/datatyping',
+    url='https://github.com/carlbordum/datatyping',
     author='Carl Bordum Hansen',
     author_email='carl@bordum.dk',
     version='0.6.0',
