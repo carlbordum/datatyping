@@ -28,7 +28,6 @@ def _new_format_dict_items(self, items, stream, indent, allowance, context, leve
         else:
             write(" " * indent)
 
-
 def _new_safe_repr(object, context, maxlevels, level):
     """Return object type name except for dict keys.
     
@@ -88,37 +87,27 @@ def _new_safe_repr(object, context, maxlevels, level):
         return format % ", ".join(items), readable, recursive
     return typerepr(object), True, False
 
-
-@contextlib.contextmanager
-def change_pprint_repr():
-    old_safe_repr = _pprint._safe_repr
-    _pprint._safe_repr = _new_safe_repr
-    try:
-        old_format_dict_items = _pprint.PrettyPrinter._format_dict_items
-    except AttributeError:
-        raise RuntimeError("Only Python3.5+ supported (datatyping.printer)")
-    _pprint.PrettyPrinter._format_dict_items = _new_format_dict_items
-    yield
-    _pprint._safe_repr = old_safe_repr
-    _pprint.PrettyPrinter._format_dict_items = old_format_dict_items
+class DatatypingPrettyPrinter(_pprint.PrettyPrinter):
+    def format(self, object, context, maxlevels, level):
+        """
+        Override format to call _new_safe_repr
+        """
+        return _new_safe_repr(object, context, maxlevels, level)
 
 
 def pprint(object, stream=None, indent=4, width=80, depth=None, compact=False):
     """Pretty-prints the data structure."""
-    with change_pprint_repr():
-        _pprint.pprint(
-            object,
-            stream=stream,
-            indent=indent,
-            width=width,
-            depth=depth,
-            compact=compact,
-        )
+    DatatypingPrettyPrinter(
+        stream=stream,
+        indent=indent,
+        width=width,
+        depth=depth,
+        compact=compact
+    ).pprint(object)
 
 
 def pformat(object, indent=4, width=80, depth=None, compact=False):
     """Return the pretty printed data structure of *object*."""
-    with change_pprint_repr():
-        return _pprint.pformat(
-            object, indent=indent, width=width, depth=depth, compact=compact
-        )
+    return DatatypingPrettyPrinter(
+        indent=indent, width=width, depth=depth, compact=compact
+    ).pformat(object)
