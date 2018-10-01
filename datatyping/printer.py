@@ -28,6 +28,7 @@ def _new_format_dict_items(self, items, stream, indent, allowance, context, leve
         else:
             write(" " * indent)
 
+
 def _new_safe_repr(object, context, maxlevels, level):
     """Return object type name except for dict keys.
     
@@ -86,6 +87,7 @@ def _new_safe_repr(object, context, maxlevels, level):
             items = [items[0]]
         return format % ", ".join(items), readable, recursive
     return typerepr(object), True, False
+
 
 class DatatypingPrettyPrinter(_pprint.PrettyPrinter):
     def format(self, object, context, maxlevels, level):
