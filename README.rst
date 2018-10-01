@@ -39,6 +39,7 @@ Run tests
 .. code-block:: bash
 
     $ pip install pytest
+    $ pip install hypothesis
     $ python -m pytest
 
 Build documentation
