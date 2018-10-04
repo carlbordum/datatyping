@@ -12,6 +12,7 @@ cache: pip
 
 install:
     - pip install .
+    - pip install hypothesis
 
 script:
     - pytest --verbose --tb=native
