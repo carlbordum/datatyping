@@ -5,6 +5,7 @@ sudo: false
 python:
     - "3.5"
     - "3.6"
+    - "3.7"
     - "nightly"
     # - "pypy-5.3.1"  # install command doesnt work with pypy, help appreciated
 
