@@ -1,5 +1,5 @@
 import pytest
-from datatyping import validate, customtype
+from datatyping.datatyping import validate, customtype
 
 
 @customtype
@@ -34,7 +34,8 @@ def test_simple_t():
 
 
 def test_simple_til():
-    assert validate([two_item_list], [[1, 2], ['a', -4, 5], [3.4, 'b']]) is None
+    assert validate([two_item_list], [
+                    [1, 2], ['a', -4, 5], [3.4, 'b']]) is None
 
 
 def test_simple_til2():
@@ -70,10 +71,10 @@ def test_nested():
 def test_nested_error():
     with pytest.raises(TypeError):
         validate([{'id': positive_int, 'name': title}],
-            [
-                {'id': 7, 'name': 'Donald Duck'},
-                {'id': -8, 'name': 'Walt Disney'},
-            ]
+                 [
+            {'id': 7, 'name': 'Donald Duck'},
+            {'id': -8, 'name': 'Walt Disney'},
+        ]
         )
 
 

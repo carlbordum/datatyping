@@ -1,5 +1,5 @@
 import pytest
-from datatyping import validate
+from datatyping.datatyping import validate
 
 
 def test_empty():
@@ -45,17 +45,17 @@ def test_list_typeerror():
 
 def test_nested_list():
     assert validate({'a': [[int], [str]]},
-        {'a': [[1,2,3,4], ['a', 'b', 'c', 'd']]}) is None
+                    {'a': [[1, 2, 3, 4], ['a', 'b', 'c', 'd']]}) is None
 
 
 def test_nested_dict():
     assert validate({'a': {'b': [[int], [str]]}},
-        {'a': {'b': [[1,2,3,4], ['a','b','c']]}}) is None
+                    {'a': {'b': [[1, 2, 3, 4], ['a', 'b', 'c']]}}) is None
 
 
 def test_mad_nesting():
     assert validate({'list': [int, str, [[int], [int]]]},
-        {'list': [1, 'a', [[1,2,3], [4,5,6]]]}) is None
+                    {'list': [1, 'a', [[1, 2, 3], [4, 5, 6]]]}) is None
 
 
 def test_advanced():
