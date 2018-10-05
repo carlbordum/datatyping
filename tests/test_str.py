@@ -1,7 +1,7 @@
 import pytest
 from hypothesis import given
 from hypothesis.strategies import lists, text
-from datatyping import validate
+from datatyping.datatyping import validate
 
 
 @given(ss=lists(text()))

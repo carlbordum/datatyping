@@ -1,5 +1,5 @@
 import pytest
-from datatyping import validate
+from datatyping.datatyping import validate
 
 
 def test_empty():
@@ -27,7 +27,8 @@ from types import SimpleNamespace
 
 def test_mapping_empty():
     with pytest.raises(TypeError):
-        assert validate([dict], [SimpleNamespace(), SimpleNamespace(), SimpleNamespace()]) is None
+        assert validate([dict], [SimpleNamespace(),
+                                 SimpleNamespace(), SimpleNamespace()]) is None
 
 
 def test_mapping_empty_reversed():
@@ -38,7 +39,7 @@ def test_mapping_empty_reversed():
 def test_dict_nested():
     with pytest.raises(TypeError):
         assert validate([{'a': {'b': [dict]}}],
-            [
-                {'a': {'b': [{}, SimpleNamespace()]}},
-                {'a': {'b': [{'any': 'key'}, {'used': 'here'}]}},
-            ]) is None
+                        [
+            {'a': {'b': [{}, SimpleNamespace()]}},
+            {'a': {'b': [{'any': 'key'}, {'used': 'here'}]}},
+        ]) is None

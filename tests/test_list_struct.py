@@ -2,7 +2,7 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import lists, integers, floats, text, one_of, dictionaries
 
-from datatyping import validate
+from datatyping.datatyping import validate
 
 
 def test_empty():
@@ -56,4 +56,4 @@ def test_dict_nested():
                     [
                         {'a': {'b': [{}, {}]}},
                         {'a': {'b': [{'any': 'key'}, {'used': 'here'}]}},
-                    ]) is None
+    ]) is None

@@ -1,5 +1,5 @@
 import pytest
-from datatyping import validate
+from datatyping.datatyping import validate
 
 
 def test_empty():
@@ -25,7 +25,7 @@ def test_dict_strict():
 
 def test_dict_nested():
     assert validate(({'a': {'b': (dict,)}},),
-        (
-            {'a': {'b': ({}, {})}},
-            {'a': {'b': ({'any': 'key'}, {'used': 'here'})}},
-        )) is None
+                    (
+        {'a': {'b': ({}, {})}},
+        {'a': {'b': ({'any': 'key'}, {'used': 'here'})}},
+    )) is None
