@@ -5,6 +5,7 @@ sudo: false
 python:
     - "3.5"
     - "3.6"
+    # - "3.7"
     - "nightly"
     # - "pypy-5.3.1"  # install command doesnt work with pypy, help appreciated
 
@@ -12,6 +13,7 @@ cache: pip
 
 install:
     - pip install .
+    - pip install hypothesis
 
 script:
     - pytest --verbose --tb=native
