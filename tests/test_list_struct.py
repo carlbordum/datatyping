@@ -28,9 +28,8 @@ def test_list_lengths(lst):
         validate([int, int, int, str], lst)
 
 
-@given(lst=lists(dictionaries(max_size=0)))
-def test_dict_empty(lst):
-    assert validate([dict], lst) is None
+def test_dict_empty():
+    assert validate([dict], [{}]) is None
 
 
 @given(lst=lists(fixed_dictionaries({'a': integers()})))
