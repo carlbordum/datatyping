@@ -1,4 +1,8 @@
 import pytest
+from hypothesis import given, assume
+from hypothesis.strategies import fixed_dictionaries, integers, characters, composite, \
+    dictionaries, booleans, floats, lists
+
 from datatyping.datatyping import validate
 
 
@@ -6,32 +10,54 @@ def test_empty():
     assert validate({}, {}) is None
 
 
-def test_plain():
-    assert validate({'a': int, 'b': str}, {'a': 1, 'b': 'c'}) is None
+@given(dct=fixed_dictionaries({'a': integers(), 'b': characters()}))
+def test_plain(dct):
+    assert validate({'a': int, 'b': str}, dct) is None
 
 
-def test_plain_typeerror():
+@given(dct=fixed_dictionaries({'a': characters()}))
+def test_plain_type_error(dct):
     with pytest.raises(TypeError):
-        validate({'a': int}, {'a': 3.4})
+        validate({'a': int}, dct)
 
 
-def test_plain_keyerror():
+@given(dct=fixed_dictionaries({'a': characters()}))
+def test_plain_key_error(dct):
     with pytest.raises(KeyError):
-        validate({'a': str, 'b': float}, {'a': 'abc'})
+        validate({'a': str, 'b': float}, dct)
 
 
-def test_plain_no_strict():
-    assert validate({'a': str}, {'a': 'abc', 'b': 123}, strict=False) is None
+@composite
+def dict_with_a(draw):
+    sample = draw(dictionaries(characters(), integers()))
+    sample['a'] = draw(characters())
+    return sample
 
 
-def test_plain_no_strict_error():
+@given(dct=dict_with_a())
+def test_plain_no_strict(dct):
+    assert validate({'a': str}, dct, strict=False) is None
+
+
+@composite
+def dict_with_a_without_b(draw):
+    sample = draw(dictionaries(characters(), integers()))
+    sample['a'] = draw(characters())
+    sample.pop('b', None)
+    return sample
+
+
+@given(dct=dict_with_a_without_b())
+def test_plain_no_strict_error(dct):
     with pytest.raises(KeyError):
-        validate({'a': str, 'b': float}, {'a': 'abc'}, strict=False)
+        validate({'a': str, 'b': float}, dct, strict=False)
 
 
-def test_strict():
+@given(dct=dict_with_a())
+def test_strict(dct):
+    assume(len(dct) > 1)
     with pytest.raises(KeyError):
-        validate({'a': str}, {'a': 'abc', 'oh no too much data': 123})
+        validate({'a': str}, dct)
 
 
 def test_list():
@@ -48,9 +74,11 @@ def test_nested_list():
                     {'a': [[1, 2, 3, 4], ['a', 'b', 'c', 'd']]}) is None
 
 
-def test_nested_dict():
-    assert validate({'a': {'b': [[int], [str]]}},
-                    {'a': {'b': [[1, 2, 3, 4], ['a', 'b', 'c']]}}) is None
+@given(dct=fixed_dictionaries({
+    'a': fixed_dictionaries({'b': integers()})
+}))
+def test_nested_dict(dct):
+    assert validate({'a': {'b': int}}, dct) is None
 
 
 def test_mad_nesting():
@@ -58,7 +86,26 @@ def test_mad_nesting():
                     {'list': [1, 'a', [[1, 2, 3], [4, 5, 6]]]}) is None
 
 
-def test_advanced():
+@composite
+def advanced_data(draw):
+    return {
+        'total_count': draw(integers()),
+        'active': draw(booleans()),
+        'people': [
+            draw(fixed_dictionaries(
+                {
+                    'id': integers(),
+                    'title': characters(),
+                    'salary': floats()
+                }
+            ))
+        ],
+        'timestamps': draw(lists(integers(), min_size=1))
+    }
+
+
+@given(dct=advanced_data())
+def test_advanced(dct):
     structure = {
         'total_count': int,
         'active': bool,
@@ -71,14 +118,4 @@ def test_advanced():
         ],
         'timestamps': [int],
     }
-    data = {
-        'total_count': 52,
-        'active': False,
-        'people': [
-            {'id': 23974291847, 'title': 'big guy', 'salary': 256.12},
-            {'id': 1932, 'title': 'python developer', 'salary': 4.5},
-            {'id': 9828974, 'title': 'president', 'salary': 122352.23},
-        ],
-        'timestamps': [12351346, 12345134, 7684545, 1267457, 0],
-    }
-    assert validate(structure, data) is None
+    assert validate(structure, dct) is None
