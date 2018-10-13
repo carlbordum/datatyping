@@ -2,13 +2,16 @@ from collections import OrderedDict
 
 import pytest
 from hypothesis import given
-from hypothesis.strategies import lists, tuples, integers, dictionaries, \
+from hypothesis.strategies import lists, iterables, integers, dictionaries, \
     fixed_dictionaries
 
 from datatyping.datatyping import validate
 
 
-@given(lst=lists(integers()), tpl=tuples(integers()))
+# The `hypothesis.strategies.tuples` is not used because it doesn't
+# work in the same way as `hypothesis.strategies.lists`.
+# See https://hypothesis.readthedocs.io/en/latest/data.html#hypothesis.strategies.tuples
+@given(lst=lists(integers()), tpl=iterables(integers()).map(tuple))
 def test_different_sequences(lst, tpl):
     with pytest.raises(TypeError):
         if tpl:

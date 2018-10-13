@@ -1,16 +1,19 @@
 import pytest
 from hypothesis import given
-from hypothesis.strategies import tuples, integers, floats, one_of, iterables
+from hypothesis.strategies import integers, floats, one_of, iterables
 
 from datatyping.datatyping import validate
 
 
-@given(tpl=tuples(integers()))
+# The `hypothesis.strategies.tuples` is not used because it doesn't
+# work in the same way as `hypothesis.strategies.lists`.
+# See https://hypothesis.readthedocs.io/en/latest/data.html#hypothesis.strategies.tuples
+@given(tpl=iterables(integers()).map(tuple))
 def test_plain(tpl):
     assert validate((int,), tpl) is None
 
 
-@given(tpl=tuples(floats()))
+@given(tpl=iterables(floats(), min_size=1).map(tuple))
 def test_plain_type_error(tpl):
     with pytest.raises(TypeError):
         validate((int,), tpl)
