@@ -1,31 +1,23 @@
 import pytest
+from hypothesis import given
+from hypothesis.strategies import tuples, integers, floats, one_of, iterables
+
 from datatyping.datatyping import validate
 
 
-def test_empty():
-    assert validate((), ()) is None
+@given(tpl=tuples(integers()))
+def test_plain(tpl):
+    assert validate((int,), tpl) is None
 
 
-def test_plain():
-    assert validate((int, ), (1, 2, 3, 4, 5)) is None
-
-
-def test_plain_typeerror():
+@given(tpl=tuples(floats()))
+def test_plain_type_error(tpl):
     with pytest.raises(TypeError):
-        validate((int, ), (1, 2, 3, 4.5))
+        validate((int,), tpl)
 
 
-def test_dict_empty():
-    assert validate((dict, ), ({}, {}, {})) is None
-
-
-def test_dict_strict():
-    assert validate(({'a': int}, ), ({'a': 123}, {'a': 456})) is None
-
-
-def test_dict_nested():
-    assert validate(({'a': {'b': (dict,)}},),
-                    (
-        {'a': {'b': ({}, {})}},
-        {'a': {'b': ({'any': 'key'}, {'used': 'here'})}},
-    )) is None
+@given(tpl=one_of(iterables(integers(), min_size=5).map(tuple),
+                  iterables(integers(), max_size=3).map(tuple)))
+def test_list_lengths(tpl):
+    with pytest.raises(ValueError):
+        validate((int, int, int, str), tpl)
