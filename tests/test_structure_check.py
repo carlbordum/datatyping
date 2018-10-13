@@ -1,45 +1,45 @@
+from collections import OrderedDict
+
 import pytest
+from hypothesis import given
+from hypothesis.strategies import lists, tuples, integers, dictionaries, \
+    fixed_dictionaries
+
 from datatyping.datatyping import validate
 
 
-def test_empty():
+@given(lst=lists(integers()), tpl=tuples(integers()))
+def test_different_sequences(lst, tpl):
     with pytest.raises(TypeError):
-        assert validate([], ()) is None
+        if tpl:
+            validate([int], tpl)
+        else:
+            validate([], tpl)
 
-
-def test_empty_reversed():
     with pytest.raises(TypeError):
-        assert validate((), []) is None
+        if lst:
+            validate((int), lst)
+        else:
+            validate((), lst)
 
 
-def test_plain():
+@given(dct=dictionaries(integers(), integers()))
+def test_different_mappings(dct):
     with pytest.raises(TypeError):
-        assert validate([int], (1, 2, 3, 4, 5)) is None
+        validate(dict, OrderedDict(dct))
+        validate(OrderedDict, dct)
 
 
-def test_plain_reversed():
-    with pytest.raises(TypeError):
-        assert validate((int, ), [1, 2, 3, 4, 5]) is None
-
-
-from types import SimpleNamespace
-
-
-def test_mapping_empty():
-    with pytest.raises(TypeError):
-        assert validate([dict], [SimpleNamespace(),
-                                 SimpleNamespace(), SimpleNamespace()]) is None
-
-
-def test_mapping_empty_reversed():
-    with pytest.raises(TypeError):
-        assert validate([SimpleNamespace], [{}, {}, {}]) is None
-
-
-def test_dict_nested():
-    with pytest.raises(TypeError):
-        assert validate([{'a': {'b': [dict]}}],
-                        [
-            {'a': {'b': [{}, SimpleNamespace()]}},
-            {'a': {'b': [{'any': 'key'}, {'used': 'here'}]}},
-        ]) is None
+@given(lst=lists(
+    fixed_dictionaries({
+        'a': fixed_dictionaries({
+            'b': lists(
+                dictionaries(integers(), integers(), min_size=1),
+                min_size=1
+            )
+        })
+    }),
+    min_size=1
+))
+def test_dict_nested(lst):
+    assert validate([{'a': {'b': [dict]}}], lst) is None
