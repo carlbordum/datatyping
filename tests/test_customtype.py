@@ -1,11 +1,20 @@
+import string
+
 import pytest
+from hypothesis import given, assume
+from hypothesis.strategies import lists, integers, text, one_of, composite, \
+    fixed_dictionaries
+
 from datatyping.datatyping import validate, customtype
+
+
+# Custom type definitions
 
 
 @customtype
 def positive_int(i):
     if i < 1:
-        raise TypeError('%d is negative (smile :))' % i)
+        raise TypeError('%d is negative' % i)
 
 
 @customtype
@@ -15,70 +24,95 @@ def title(s):
 
 
 @customtype
-def two_item_list(sequence):
-    if len(sequence) not in (2, 3):
-        raise TypeError(len(sequence))
+def two_item_list(lst):
+    if len(lst) != 2:
+        raise TypeError('list contains %d items, not 2' % len(lst))
 
 
-# pi = positive_int
-# t = title
-# til = two_item_list
+# Tests
 
 
-def test_simple_pi():
-    assert validate([positive_int], [1, 2, 3, 4, 1203]) is None
+@given(num=integers(min_value=1))
+def test_simple_pos_int(num):
+    assert validate(positive_int, num) is None
 
 
-def test_simple_t():
-    assert validate([title], ['A Title', 'Another Title String']) is None
+@given(words=text(alphabet=string.ascii_lowercase + ' ').map(str.title))
+def test_simple_title(words):
+    assert validate(title, words) is None
 
 
-def test_simple_til():
-    assert validate([two_item_list], [
-                    [1, 2], ['a', -4, 5], [3.4, 'b']]) is None
+@given(lst=lists(integers(), min_size=2, max_size=2))
+def test_simple_ti_list(lst):
+    assert validate(two_item_list, lst) is None
 
 
-def test_simple_til2():
-    assert validate(two_item_list, [1, 2]) is None
-
-
-def test_simple_pi_error():
+@given(num=integers(max_value=-1))
+def test_simple_pos_int_error(num):
     with pytest.raises(TypeError):
-        validate(positive_int, -1)
+        validate(positive_int, num)
 
 
-def test_simple_t_error():
+@given(words=text(alphabet=string.ascii_lowercase + ' '))
+def test_simple_title_error(words):
+    assume(len(words) > 0)
+    assume(not words.isspace())
     with pytest.raises(TypeError):
-        validate(title, 'I do not write title like the Brittish')
+        validate(title, words)
 
 
-def test_simple_til_error():
+@given(lst=one_of(lists(integers(), max_size=1),
+                  lists(integers(), min_size=3)))
+def test_simple_ti_list_error(lst):
     with pytest.raises(TypeError):
-        validate(two_item_list, [0, 1, 2, 3])
+        validate(two_item_list, lst)
 
 
-def test_nested():
-    struct = [
+@given(data=lists(fixed_dictionaries(
+    {
+        'id': integers(min_value=1),
+        'name': text(alphabet=string.ascii_lowercase + ' ').map(str.title)
+    }
+)))
+def test_nested(data):
+    type_mask = [
         {'id': positive_int, 'name': title}
     ]
-    data = [
-        {'id': 5, 'name': 'Donald Duck'},
-        {'id': 6, 'name': 'Walt Disney'},
+
+    assert validate(type_mask, data) is None
+
+
+@given(data=lists(fixed_dictionaries(
+    {
+        'id': integers(max_value=-1),
+        'name': text(alphabet=string.ascii_lowercase + ' ').map(str.title)
+    }
+)))
+def test_nested_error(data):
+    assume(len(data) != 0)
+    type_mask = [
+        {'id': positive_int, 'name': title}
     ]
-    assert validate(struct, data) is None
 
-
-def test_nested_error():
     with pytest.raises(TypeError):
-        validate([{'id': positive_int, 'name': title}],
-                 [
-            {'id': 7, 'name': 'Donald Duck'},
-            {'id': -8, 'name': 'Walt Disney'},
+        validate(type_mask, data)
+
+
+@composite
+def deeply_nested_list(draw):
+    return [
+        draw(lists(integers(), min_size=2, max_size=2)),
+        [
+            draw(integers(min_value=1)),
+            draw(lists(integers(), min_size=2, max_size=2))
+        ],
+        [
+            draw(text(alphabet=string.ascii_lowercase + ' ').map(str.title))
         ]
-        )
+    ]
 
 
-def test_deep_nesting():
-    struct = [two_item_list, [positive_int, two_item_list], [title]]
-    data = [[1, 2], [3, [4, 5]], ['Carl', 'Bordum', 'Hansen']]
-    assert validate(struct, data, strict=False) is None
+@given(data=deeply_nested_list())
+def test_deep_nesting(data):
+    type_mask = [two_item_list, [positive_int, two_item_list], [title]]
+    assert validate(type_mask, data) is None
