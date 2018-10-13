@@ -1,20 +1,16 @@
 import pytest
 from hypothesis import given
-from hypothesis.strategies import lists, text
+from hypothesis.strategies import integers, text
+
 from datatyping.datatyping import validate
 
 
-@given(ss=lists(text()))
-def test_simple(ss):
-    assert validate([str], ss) is None
+@given(string=text())
+def test_simple(string):
+    assert validate(str, string) is None
 
 
-@given(s=text())
-def test_simple_error(s):
+@given(not_string=integers())
+def test_simple_error(not_string):
     with pytest.raises(TypeError):
-        validate([str], s)
-
-
-@given(ss=lists(lists(text())))
-def test_nested(ss):
-    assert validate([[str]], ss) is None
+        validate(str, not_string)
