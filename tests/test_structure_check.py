@@ -34,8 +34,9 @@ def test_different_mappings(dct):
     fixed_dictionaries({
         'a': fixed_dictionaries({
             'b': lists(
-                dictionaries(integers(), integers(), min_size=1),
-                min_size=1
+                dictionaries(integers(), integers(), min_size=1, max_size=3),
+                min_size=1,
+                max_size=3
             )
         })
     }),
