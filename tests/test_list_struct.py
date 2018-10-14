@@ -27,9 +27,9 @@ def test_list_lengths(lst):
         validate([int, int, int, str], lst)
 
 
-@given(lst=lists(lists(integers())))
+@given(lst=lists(lists(integers(), min_size=1), min_size=1))
 def test_nested(lst):
-    assert validate([[int]], lst)
+    assert validate([[int]], lst) is None
 
     with pytest.raises(TypeError):
         validate([int], lst)
@@ -37,7 +37,9 @@ def test_nested(lst):
 
 @composite
 def heavy_nested_data(draw):
-    return [draw(lists(integers)), draw(floats()), lists(lists(floats()))]
+    return [draw(lists(integers(), min_size=1, max_size=3)),
+            draw(floats()),
+            draw(lists(lists(floats(), min_size=1, max_size=3), min_size=1, max_size=3))]
 
 
 @given(lst=heavy_nested_data())
@@ -45,7 +47,7 @@ def test_heavy_nested(lst):
     assert validate([[int], float, [[float]]], lst) is None
 
     with pytest.raises(TypeError):
-        assert validate([[str], int, int], lst)
+        validate([[str], int, int], lst)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         validate([[[float]]], lst)
