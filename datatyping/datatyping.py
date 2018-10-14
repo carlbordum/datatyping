@@ -5,7 +5,7 @@ __license__ = "MIT"
 
 import collections.abc
 import reprlib
-import warning
+import warnings
 
 
 # Open questions:
@@ -63,7 +63,7 @@ def customtype(check_function):
         Function that should be used to type check.
 
     """
-    raise warning.DeprecationWarning('The @customtype decorator is no longer needed')
+    warnings.warn('The @customtype decorator is no longer needed', DeprecationWarning)
     check_function.__datatyping_validate = True
     return check_function
 
