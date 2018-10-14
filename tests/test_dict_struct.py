@@ -60,30 +60,11 @@ def test_strict(dct):
         validate({'a': str}, dct)
 
 
-def test_list():
-    assert validate({'a': [int]}, {'a': [1, 2, 3]}) is None
-
-
-def test_list_typeerror():
-    with pytest.raises(TypeError):
-        validate({'a': [int]}, {'a': [1, 2, 3.6]})
-
-
-def test_nested_list():
-    assert validate({'a': [[int], [str]]},
-                    {'a': [[1, 2, 3, 4], ['a', 'b', 'c', 'd']]}) is None
-
-
 @given(dct=fixed_dictionaries({
     'a': fixed_dictionaries({'b': integers()})
 }))
 def test_nested_dict(dct):
     assert validate({'a': {'b': int}}, dct) is None
-
-
-def test_mad_nesting():
-    assert validate({'list': [int, str, [[int], [int]]]},
-                    {'list': [1, 'a', [[1, 2, 3], [4, 5, 6]]]}) is None
 
 
 @composite

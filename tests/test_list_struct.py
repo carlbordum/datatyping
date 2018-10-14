@@ -1,7 +1,6 @@
 import pytest
 from hypothesis import given
-from hypothesis.strategies import lists, integers, floats, text, one_of, dictionaries, \
-    fixed_dictionaries
+from hypothesis.strategies import lists, integers, floats, one_of, composite
 
 from datatyping.datatyping import validate
 
@@ -28,23 +27,25 @@ def test_list_lengths(lst):
         validate([int, int, int, str], lst)
 
 
-def test_dict_empty():
-    assert validate([dict], [{}]) is None
+@given(lst=lists(lists(integers())))
+def test_nested(lst):
+    assert validate([[int]], lst)
+
+    with pytest.raises(TypeError):
+        validate([int], lst)
 
 
-@given(lst=lists(fixed_dictionaries({'a': integers()})))
-def test_dict_strict(lst):
-    assert validate([{'a': int}], lst) is None
+@composite
+def heavy_nested_data(draw):
+    return [draw(lists(integers)), draw(floats()), lists(lists(floats()))]
 
 
-@given(lists(dictionaries(one_of(integers(), text()), one_of(integers(), text()))))
-def test_any_dict(d):
-    assert validate([dict], d) is None
+@given(lst=heavy_nested_data())
+def test_heavy_nested(lst):
+    assert validate([[int], float, [[float]]], lst) is None
 
+    with pytest.raises(TypeError):
+        assert validate([[str], int, int], lst)
 
-def test_dict_nested():
-    assert validate([{'a': {'b': [dict]}}],
-                    [
-                        {'a': {'b': [{}, {}]}},
-                        {'a': {'b': [{'any': 'key'}, {'used': 'here'}]}},
-    ]) is None
+    with pytest.raises(ValueError):
+        validate([[[float]]], lst)
