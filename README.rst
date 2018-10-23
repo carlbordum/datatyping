@@ -57,5 +57,5 @@ Notes
 -----
 * Inspired by `"How Python Makes Working With Data More Difficult in the Long Run" <https://jeffknupp.com/blog/2016/11/13/how-python-makes-working-with-data-more-difficult-in-the-long-run/>`_.
 * Any and all contributions are welcome.
-* Please open an issue if you need help (read: if you messed up).
+* Please open an issue if you think we can help.
 * Suggest anything you want to see support for!
